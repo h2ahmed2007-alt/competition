@@ -14,6 +14,7 @@ class controller_node(Node):
 
     def __init__(self):
         super().__init__('controller_node')
+        self.enabled = False
         self.publisher = self.create_publisher(Twist, 'cmd_vel', 10)   
         self.listener = keyboard.Listener(on_press=self.on_press)               #to listen to key presses
         self.listener.start()                                                   # start listening!!
@@ -23,8 +24,21 @@ class controller_node(Node):
 #since the movement is non holonomic and its 2d we wont use "y"
 
 
-    def on_press(self, key):                                # the function we used earlier in the listener , key is the keyboard input
+    def on_press(self, key):     # the function we used earlier in the listener , key is the keyboard input
 
+        if key == keyboard.Key.space:
+            self.enabled = True
+            print("Pilot enabled!")
+            return
+        
+        if key == keyboard.Key.esc:
+            self.enabled = False
+            print("Pilot disabled!")
+            return
+        
+        if not self.enabled:
+            return
+                              
         if key == keyboard.Key.up or getattr(key, 'char', None) == 'w' :
 
             twist = Twist()                                 #making a Twist type ros msg
@@ -58,15 +72,3 @@ class controller_node(Node):
 
 
 
-def main(args=None):
-    rclpy.init(args=args)
-
-    controller = controller_node()
-
-    rclpy.spin(controller)
-
-    controller.destroy_node()
-    rclpy.shutdown()
-
-if __name__ == '__main__': 
-    main()
