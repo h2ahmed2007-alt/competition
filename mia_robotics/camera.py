@@ -5,7 +5,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 
 
-class camera(Node):
+class Camera(Node):
     def __init__(self):
         super().__init__('camera')
         self.frame = None

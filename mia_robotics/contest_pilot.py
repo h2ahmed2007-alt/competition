@@ -14,35 +14,13 @@ class controller_node(Node):
 
     def __init__(self):
         super().__init__('controller_node')
-        self.enabled = False
         self.publisher = self.create_publisher(Twist, 'cmd_vel', 10)   
-        self.listener = keyboard.Listener(on_press=self.on_press)               #to listen to key presses
+        self.listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)               #to listen to key presses
         self.listener.start()                                                   # start listening!!
 
 
-#the logic used below is linear x --> + is forward, - is backward
-#since the movement is non holonomic and its 2d we wont use "y"
+    def on_press(self, key):                                # the function we used earlier in the listener , key is the keyboard input
 
-
-    def on_press(self, key):     # the function we used earlier in the listener , key is the keyboard input
-
-        if key == keyboard.Key.space:
-            self.enabled = True
-            print("Pilot enabled!")
-            return
-        
-        if key == keyboard.Key.esc:
-            self.enabled = False
-            print("Pilot disabled!")
-            twist = Twist()                                 #making a Twist type ros msg
-            twist.linear.x = 0.0                            
-            twist.linear.y = 0.0
-            self.publisher.publish(twist)  
-            return
-        
-        if not self.enabled:
-            return
-                              
         if key == keyboard.Key.up or getattr(key, 'char', None) == 'w' :
 
             twist = Twist()                                 #making a Twist type ros msg
@@ -58,7 +36,7 @@ class controller_node(Node):
             twist.linear.y = 0.0
             self.publisher.publish(twist)  
 
-        elif key == keyboard.Key.right or getattr(key, 'char', None) == 'd' : 
+        elif getattr(key, 'char', None) == 'd' : 
 
             twist = Twist()
             twist.linear.x = 0.0
@@ -66,21 +44,55 @@ class controller_node(Node):
             self.publisher.publish(twist)  
 
         
-        elif key == keyboard.Key.left or getattr(key, 'char', None) == 'a' : 
+        elif getattr(key, 'char', None) == 'a' : 
 
             twist = Twist()
             twist.linear.x = 0.0
             twist.linear.y = 1.0
             self.publisher.publish(twist)  
 
+        elif key == keyboard.Key.left:
+
+            twist = Twist()
+            twist.linear.x = 0.0
+            twist.linear.y = 0.0
+            twist.angular.z = 1.0
+            self.publisher.publish(twist)
+            
+        elif key == keyboard.Key.right:
+
+            twist = Twist()
+            twist.linear.x = 0.0
+            twist.linear.y = 0.0
+            twist.angular.z = -1.0
+            self.publisher.publish(twist)
+            
+    def on_release(self, key) :
+        arrows = [keyboard.Key.left,keyboard.Key.right,keyboard.Key.up,keyboard.Key.down]
+        
+        move_keys = ['w', 'd', 's', 'a']
+
+        char = getattr(key, 'char', None)
+
+        if key in arrows or char in move_keys :
+
+            twist = Twist()
+            twist.linear.x = 0.0
+            twist.linear.y = 0.0
+            twist.angular.z = 0.0
+            self.publisher.publish(twist)
+
+
 
 def main(args=None):
     rclpy.init(args=args)
-    node = controller_node()
 
-    rclpy.spin(node)
+    controller = controller_node()
 
+    rclpy.spin(controller)
 
-if __name__ == '__main__':
+    controller.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__': 
     main()
-

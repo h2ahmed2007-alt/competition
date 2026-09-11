@@ -1,12 +1,12 @@
 import rclpy
 import cv2
-from camera import camera
-from YOLO_reading import get_detection
+from camera import Camera
+from yolo_reading import get_detection
 
 def main():
     rclpy.init()
 
-    camera = camera()
+    camera = Camera()
 
     while rclpy.ok():
 

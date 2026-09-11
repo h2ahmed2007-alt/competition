@@ -1,6 +1,6 @@
 from ultralytics import YOLO
 
-model = YOLO("best.pt") 
+model = YOLO("/mia_robotics/best.pt") 
 
 def get_detection(frame):
 
