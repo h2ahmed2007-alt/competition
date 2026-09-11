@@ -1,139 +1,267 @@
 #!/usr/bin/env python3
+import collections
+import math
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float32, String
 from geometry_msgs.msg import Twist
-import time
+from nav_msgs.msg import Odometry
 
-class HolonomicAutoNavigator(Node):
+class AutoReturnWithTimeoutTriggerNavigator(Node):
     def __init__(self):
-        super().__init__('auto_nav_holonomic_node')
+        super().__init__('auto_return_timeout_navigator')
 
-        # --- ROS 2 Publishers & Subscribers ---
+        # --- 1. Dynamic ROS 2 Parameters ---
+        self.declare_parameter('kp', 0.8)
+        self.declare_parameter('kd', 0.12)
+        self.declare_parameter('max_forward_speed', 0.45)
+        self.declare_parameter('max_strafe_speed', 0.55)
+        self.declare_parameter('min_speed_floor', 0.22)
+        self.declare_parameter('stop_distance', 25.0)
+        self.declare_parameter('space_wait_timeout_sec', 15.0) 
+
+        self.Kp = self.get_parameter('kp').value
+        self.Kd = self.get_parameter('kd').value
+        self.MAX_FORWARD_SPEED = self.get_parameter('max_forward_speed').value
+        self.MAX_STRAFE_SPEED = self.get_parameter('max_strafe_speed').value
+        self.MIN_SPEED_FLOOR = self.get_parameter('min_speed_floor').value
+        self.STOP_DISTANCE = self.get_parameter('stop_distance').value
+        self.WAIT_TIMEOUT = self.get_parameter('space_wait_timeout_sec').value
+
+        # --- 2. Publishers & Subscribers ---
         self.cmd_pub = self.create_publisher(Twist, '/cmd_vel', 10)
         
         self.create_subscription(Float32, '/ultrasonic_distance', self.ultrasonic_cb, 10)
         self.create_subscription(Float32, '/target_x_error', self.vision_error_cb, 10)
         self.create_subscription(String, '/target_type', self.target_type_cb, 10)
+        self.create_subscription(Odometry, '/odom', self.odom_cb, 10)
+        
+        self.create_subscription(String, '/start_trigger', self.trigger_cb, 10)
 
-        # --- State Tracking & Variables ---
-        self.state = "SEARCH_STRAFE"
-        self.scrolls_found = 0
-        self.current_distance = 999.0  # Initial fallback distance in cm
-        self.x_error = 0.0             # Horizontal pixel offset (-1.0 to 1.0)
+        # --- 3. Safety Buffers & Vision Signals ---
+        self.raw_distances = collections.deque(maxlen=5)
+        self.filtered_distance = 999.0
+        self.x_error = 0.0
         self.target_type = "none"
 
-        # --- PD Controller Gains ---
-        self.Kp = 0.8
-        self.Kd = 0.12
+        # Staleness Watchdog
+        self.last_ultra_time = self.get_clock().now()
+        self.last_vision_time = self.get_clock().now()
+        self.STALE_THRESHOLD_SEC = 2.0
+
+        # --- 4. Navigation & State Machine Variables ---
+        self.state = "SEARCH_STRAFE"
+        self.real_scrolls_found = 0
+        self.SEARCH_STRAFE_DIR = 1.0
+        self.search_start_y = 0.0
         self.prev_error = 0.0
 
-        # --- Speed Parameters ---
-        self.STOP_DISTANCE = 25.0      # Safety stopping distance (cm)
-        self.MAX_FORWARD_SPEED = 0.45  # Linear speed (m/s)
-        self.MAX_STRAFE_SPEED = 0.55   # Sideways strafe speed (m/s)
-        self.SEARCH_STRAFE_DIR = 1.0   # Direction toggle (1.0 right, -1.0 left)
+        # Odometry Tracking (Start point / Home coordinates)
+        self.robot_x = 0.0
+        self.robot_y = 0.0
+        self.start_x = 0.0
+        self.start_y = 0.0
+        self.has_home_pose = False
 
-        # --- ROS 2 Control Loop Timer (20 Hz -> 0.05s) ---
+        # Non-blocking Bypass Sub-states
+        self.bypass_substate = "INIT"
+        self.bypass_start_x = 0.0
+        self.bypass_start_y = 0.0
+
+        # Wait Timeout Timing Variable
+        self.wait_start_time = None
+
+        # --- 5. Main Timer Loop (20Hz) ---
         self.timer = self.create_timer(0.05, self.control_loop)
-        self.get_logger().info("ROS 2 Holonomic Auto Navigator Node Initialized.")
+        self.get_logger().info("Navigator Initialized: Auto-returns home, waits for external space trigger or timeouts into auto-loop!")
 
+    # --- Callbacks ---
     def ultrasonic_cb(self, msg):
-        self.current_distance = msg.data
+        self.raw_distances.append(msg.data)
+        self.filtered_distance = sum(self.raw_distances) / len(self.raw_distances)
+        self.last_ultra_time = self.get_clock().now()
 
     def vision_error_cb(self, msg):
-        self.x_error = msg.data
+        self.x_error = max(min(msg.data, 1.0), -1.0)
+        self.last_vision_time = self.get_clock().now()
 
     def target_type_cb(self, msg):
-        self.target_type = msg.data.lower()
+        self.target_type = msg.data.lower().strip()
+        self.last_vision_time = self.get_clock().now()
 
-    def handle_first_scroll_cleared(self):
-        self.get_logger().info("First REAL Scroll reached! Executing bypass maneuver...")
-        cmd = Twist()
+    def odom_cb(self, msg):
+        self.robot_x = msg.pose.pose.position.x
+        self.robot_y = msg.pose.pose.position.y
+        
+        if not self.has_home_pose:
+            self.start_x = self.robot_x
+            self.start_y = self.robot_y
+            self.has_home_pose = True
+            self.get_logger().info(f"Home Position Registered: X={self.start_x:.2f}, Y={self.start_y:.2f}")
 
-        # Step 1: Pause briefly
-        cmd.linear.x = 0.0
-        cmd.linear.y = 0.0
-        self.cmd_pub.publish(cmd)
-        time.sleep(1.0)
+    
+    def trigger_cb(self, msg):
+        cmd_str = msg.data.lower().strip()
+        if self.state == "WAITING_FOR_TRIGGER":
+            self.get_logger().info(f"Received space trigger from external node ('{cmd_str}'). Resetting mission...")
+            self.reset_mission()
 
-        # Step 2: Back off slightly
-        cmd.linear.x = -0.15
-        self.cmd_pub.publish(cmd)
-        time.sleep(1.0)
-
-        # Step 3: Strafe sideways to bypass
-        cmd.linear.x = 0.0
-        cmd.linear.y = 0.35 * self.SEARCH_STRAFE_DIR
-        self.cmd_pub.publish(cmd)
-        time.sleep(1.2)
-
-        # Reset state for 2nd scroll search
-        self.scrolls_found = 1
+    def reset_mission(self):
+        self.get_logger().info(">>> RE-STARTING MISSION RUN <<<")
+        self.real_scrolls_found = 0
+        self.bypass_substate = "INIT"
+        self.search_start_y = self.robot_y
+        self.wait_start_time = None
         self.state = "SEARCH_STRAFE"
 
-    def control_loop(self):
+    # --- Non-blocking Odometry Bypass ---
+    def execute_odom_bypass(self):
         cmd = Twist()
 
-        # --- STATE 1: SEARCHING ---
+        if self.bypass_substate == "INIT":
+            self.bypass_start_x = self.robot_x
+            self.bypass_start_y = self.robot_y
+            self.bypass_substate = "BACK_OFF"
+            self.get_logger().info("Bypassing first REAL cube: Backing off...")
+
+        elif self.bypass_substate == "BACK_OFF":
+            dist = abs(self.robot_x - self.bypass_start_x)
+            if dist < 0.20:
+                cmd.linear.x = -self.MIN_SPEED_FLOOR
+            else:
+                self.bypass_start_y = self.robot_y
+                self.bypass_substate = "STRAFE_SIDEWAYS"
+
+        elif self.bypass_substate == "STRAFE_SIDEWAYS":
+            dist = abs(self.robot_y - self.bypass_start_y)
+            if dist < 0.15 or self.target_type=="real":
+                cmd.linear.y = self.MAX_STRAFE_SPEED * self.SEARCH_STRAFE_DIR
+            else:
+                self.real_scrolls_found += 1
+                self.bypass_substate = "INIT"
+                self.state = "SEARCH_STRAFE"
+                self.get_logger().info("First REAL cube bypassed. Resuming search...")
+
+        self.cmd_pub.publish(cmd)
+
+    # --- Return to Home Point ---
+    def execute_return_home(self):
+        cmd = Twist()
+
+        dx = self.start_x - self.robot_x
+        dy = self.start_y - self.robot_y
+        dist_to_home = math.hypot(dx, dy)
+
+        if dist_to_home <= 0.10:
+            self.state = "WAITING_FOR_TRIGGER"
+            self.wait_start_time = self.get_clock().now()
+            self.get_logger().info(f"=== Reached Start Point! Waiting up to {self.WAIT_TIMEOUT}s for space signal on /start_trigger ===")
+            self.cmd_pub.publish(Twist())
+            return
+
+        cmd.linear.x = max(min(dx * 0.8, self.MAX_FORWARD_SPEED), -self.MAX_FORWARD_SPEED)
+        cmd.linear.y = max(min(dy * 0.8, self.MAX_STRAFE_SPEED), -self.MAX_STRAFE_SPEED)
+
+        if abs(cmd.linear.x) < 0.05 and abs(dx) > 0.02:
+            cmd.linear.x = math.copysign(self.MIN_SPEED_FLOOR, dx)
+        if abs(cmd.linear.y) < 0.05 and abs(dy) > 0.02:
+            cmd.linear.y = math.copysign(self.MIN_SPEED_FLOOR, dy)
+
+        self.cmd_pub.publish(cmd)
+
+    # --- Main Control Loop ---
+    def control_loop(self):
+        cmd = Twist()
+        now = self.get_clock().now()
+
+        # Watchdog Safety Check
+        if self.state in ["SEARCH_STRAFE", "TRACK_HOLONOMIC"]:
+            if ((now - self.last_ultra_time).nanoseconds / 1e9 > self.STALE_THRESHOLD_SEC or
+                (now - self.last_vision_time).nanoseconds / 1e9 > self.STALE_THRESHOLD_SEC):
+                self.get_logger().warn("DATA STALE! Emergency Stop engaged.", throttle_duration_sec=2.0)
+                self.cmd_pub.publish(Twist())
+                return
+
+        # STATE 1: SEARCHING
         if self.state == "SEARCH_STRAFE":
             if self.target_type == "real":
                 self.state = "TRACK_HOLONOMIC"
-                self.get_logger().info(f"REAL Target detected! Tracking scroll #{self.scrolls_found + 1}...")
+                self.get_logger().info("REAL target detected! Tracking...")
             else:
-                cmd.linear.x = 0.12
-                cmd.linear.y = 0.3 * self.SEARCH_STRAFE_DIR
-                cmd.angular.z = 0.0
+                if self.target_type == "fake":
+                    self.get_logger().info("Ignoring FAKE target...", throttle_duration_sec=3.0)
 
-        # --- STATE 2: TRACKING ---
+                if abs(self.robot_y - self.search_start_y) > 1.5:
+                    self.SEARCH_STRAFE_DIR *= -1.0
+                    self.search_start_y = self.robot_y
+
+                cmd.linear.x = self.MIN_SPEED_FLOOR
+                cmd.linear.y = 0.35 * self.SEARCH_STRAFE_DIR
+                self.cmd_pub.publish(cmd)
+
+        # STATE 2: TRACKING
         elif self.state == "TRACK_HOLONOMIC":
             if self.target_type != "real":
+                self.get_logger().warn("Lost REAL target. Resuming search...")
                 self.state = "SEARCH_STRAFE"
                 return
 
-            # Safety check via Ultrasonic
-            if self.current_distance <= self.STOP_DISTANCE:
-                if self.scrolls_found == 0:
-                    self.handle_first_scroll_cleared()
-                    return
+            if self.filtered_distance <= self.STOP_DISTANCE:
+                if self.real_scrolls_found == 0:
+                    self.state = "BYPASS_FIRST"
                 else:
-                    self.state = "STOPPING"
-                    return
+                    self.state = "RETURN_HOME"
+                    self.get_logger().info("All REAL targets processed. Returning to Start Point...")
+                return
 
-            # PD Control for side alignment
-            error_derivative = self.x_error - self.prev_error
-            strafe_correction = (self.Kp * self.x_error) + (self.Kd * error_derivative)
+            # PD Control
+            err_diff = self.x_error - self.prev_error
+            strafe_corr = (self.Kp * self.x_error) + (self.Kd * err_diff)
             self.prev_error = self.x_error
 
-            # Clamp strafe limits
-            cmd.linear.y = -max(min(strafe_correction, self.MAX_STRAFE_SPEED), -self.MAX_STRAFE_SPEED)
+            cmd.linear.y = -max(min(strafe_corr, self.MAX_STRAFE_SPEED), -self.MAX_STRAFE_SPEED)
 
-            # Linear deceleration
-            if self.current_distance < 40.0:
-                speed = self.MAX_FORWARD_SPEED * (self.current_distance / 40.0)
+            if self.filtered_distance < 40.0:
+                speed = self.MAX_FORWARD_SPEED * (self.filtered_distance / 40.0)
             else:
                 speed = self.MAX_FORWARD_SPEED
 
-            cmd.linear.x = max(speed, 0.1)
-            cmd.angular.z = 0.0
+            cmd.linear.x = max(speed, self.MIN_SPEED_FLOOR)
+            self.cmd_pub.publish(cmd)
 
-        # --- STATE 3: STOPPING ---
-        elif self.state == "STOPPING":
-            cmd.linear.x = 0.0
-            cmd.linear.y = 0.0
-            cmd.angular.z = 0.0
-            self.get_logger().info("Autonomous Mission Complete! Awaiting Green Card.")
+        # STATE 3: BYPASS
+        elif self.state == "BYPASS_FIRST":
+            self.execute_odom_bypass()
 
-        self.cmd_pub.publish(cmd)
+        # STATE 4: RETURN TO HOME
+        elif self.state == "RETURN_HOME":
+            self.execute_return_home()
+
+        # STATE 5: WAITING FOR EXTERNAL TRIGGER OR TIMEOUT AUTO-RESTART
+        elif self.state == "WAITING_FOR_TRIGGER":
+            self.cmd_pub.publish(Twist())  
+
+            if self.wait_start_time is not None:
+                elapsed_wait = (now - self.wait_start_time).nanoseconds / 1e9
+
+                # (Timeout)
+                if elapsed_wait >= self.WAIT_TIMEOUT:
+                    self.get_logger().warn(f"Wait timeout ({self.WAIT_TIMEOUT}s) reached without external space signal. Auto-looping now!")
+                    self.reset_mission()
+
+    def stop_robot(self):
+        self.get_logger().info("Shutting down node. Zero velocity sent.")
+        self.cmd_pub.publish(Twist())
 
 def main(args=None):
     rclpy.init(args=args)
-    node = HolonomicAutoNavigator()
+    node = AutoReturnWithTimeoutTriggerNavigator()
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
         pass
     finally:
+        node.stop_robot()
         node.destroy_node()
         rclpy.shutdown()
 
