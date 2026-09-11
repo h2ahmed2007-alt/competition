@@ -23,7 +23,11 @@ setup(
         ],
     },
     entry_points={
-        'console_scripts': ['main = your_package.main:main',
+        'console_scripts': [
+	"pilot = mia_robotics.contest_pilot:main",
+	"auto = mia_robotics.auto_navg:main",
+	"camera = mia_robotics.main:main"
+	
         ],
     },
 )

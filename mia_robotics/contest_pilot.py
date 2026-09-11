@@ -34,6 +34,10 @@ class controller_node(Node):
         if key == keyboard.Key.esc:
             self.enabled = False
             print("Pilot disabled!")
+            twist = Twist()                                 #making a Twist type ros msg
+            twist.linear.x = 0.0                            
+            twist.linear.y = 0.0
+            self.publisher.publish(twist)  
             return
         
         if not self.enabled:
@@ -70,5 +74,13 @@ class controller_node(Node):
             self.publisher.publish(twist)  
 
 
+def main(args=None):
+    rclpy.init(args=args)
+    node = controller_node()
 
+    rclpy.spin(node)
+
+
+if __name__ == '__main__':
+    main()
 
