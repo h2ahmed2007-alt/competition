@@ -3,7 +3,7 @@ import collections
 import math
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Float32, String
+from std_msgs.msg import Float32, String,Int32
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 
@@ -14,9 +14,9 @@ class AutoReturnWithTimeoutTriggerNavigator(Node):
         # --- 1. Dynamic ROS 2 Parameters ---
         self.declare_parameter('kp', 0.8)
         self.declare_parameter('kd', 0.12)
-        self.declare_parameter('max_forward_speed', 0.45)
-        self.declare_parameter('max_strafe_speed', 0.55)
-        self.declare_parameter('min_speed_floor', 0.22)
+        self.declare_parameter('max_forward_speed', 45.0)
+        self.declare_parameter('max_strafe_speed', 55.0)
+        self.declare_parameter('min_speed_floor', 20.0)
         self.declare_parameter('stop_distance', 25.0)
         self.declare_parameter('space_wait_timeout_sec', 15.0) 
 
@@ -31,7 +31,7 @@ class AutoReturnWithTimeoutTriggerNavigator(Node):
         # --- 2. Publishers & Subscribers ---
         self.cmd_pub = self.create_publisher(Twist, '/cmd_vel', 10)
         
-        self.create_subscription(Float32, '/ultrasonic_distance', self.ultrasonic_cb, 10)
+        self.create_subscription(int32, '/ultrasonic_distance', self.ultrasonic_cb, 10)
         self.create_subscription(Float32, '/target_x_error', self.vision_error_cb, 10)
         self.create_subscription(String, '/target_type', self.target_type_cb, 10)
         self.create_subscription(Odometry, '/odom', self.odom_cb, 10)
@@ -173,6 +173,22 @@ class AutoReturnWithTimeoutTriggerNavigator(Node):
     def control_loop(self):
         cmd = Twist()
         now = self.get_clock().now()
+        
+        
+        
+        if self.filtered_distance<=self.STOP_DISTANCE:
+            
+            
+            
+            if self.state=="TRACK_HOLONOMIC":
+                if self.real_scrolls_found==0:
+                    self.state="BYPASS_FRIST"
+                else:
+                    self.state="RETURN_HOME"
+                return 
+            
+            
+            self.cmd_pub.publish(Twist())   
 
         # Watchdog Safety Check
         if self.state in ["SEARCH_STRAFE", "TRACK_HOLONOMIC"]:
