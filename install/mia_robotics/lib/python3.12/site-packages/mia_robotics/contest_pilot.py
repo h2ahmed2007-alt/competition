@@ -83,20 +83,16 @@ class controller_node(Node):
             self.publisher.publish(twist)
 
 
+
 def main(args=None):
     rclpy.init(args=args)
 
     controller = controller_node()
 
-    try:
-        rclpy.spin(controller)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        controller.listener.stop()
-        controller.destroy_node()
-        rclpy.shutdown()
+    rclpy.spin(controller)
 
+    controller.destroy_node()
+    rclpy.shutdown()
 
-if __name__ == '__main__':
+if __name__ == '__main__': 
     main()

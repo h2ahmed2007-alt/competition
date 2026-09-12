@@ -1,0 +1,49 @@
+running egg_info
+creating build/mia_robotics/mia_robotics.egg-info
+writing build/mia_robotics/mia_robotics.egg-info/PKG-INFO
+writing dependency_links to build/mia_robotics/mia_robotics.egg-info/dependency_links.txt
+writing entry points to build/mia_robotics/mia_robotics.egg-info/entry_points.txt
+writing requirements to build/mia_robotics/mia_robotics.egg-info/requires.txt
+writing top-level names to build/mia_robotics/mia_robotics.egg-info/top_level.txt
+writing manifest file 'build/mia_robotics/mia_robotics.egg-info/SOURCES.txt'
+reading manifest file 'build/mia_robotics/mia_robotics.egg-info/SOURCES.txt'
+writing manifest file 'build/mia_robotics/mia_robotics.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build
+creating /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib
+creating /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+copying mia_robotics/camera.py -> /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+copying mia_robotics/contest_pilot.py -> /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+copying mia_robotics/yolo_reading.py -> /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+copying mia_robotics/main.py -> /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+copying mia_robotics/auto_navg.py -> /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+copying mia_robotics/__init__.py -> /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+running install
+running install_lib
+creating /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics
+copying /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics/camera.py -> /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics
+copying /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics/contest_pilot.py -> /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics
+copying /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics/yolo_reading.py -> /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics
+copying /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics/main.py -> /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics
+copying /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics/auto_navg.py -> /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics
+copying /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics/__init__.py -> /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics
+byte-compiling /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics/camera.py to camera.cpython-312.pyc
+byte-compiling /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics/contest_pilot.py to contest_pilot.cpython-312.pyc
+byte-compiling /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics/yolo_reading.py to yolo_reading.cpython-312.pyc
+byte-compiling /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics/main.py to main.cpython-312.pyc
+byte-compiling /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics/auto_navg.py to auto_navg.cpython-312.pyc
+byte-compiling /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics/__init__.py to __init__.cpython-312.pyc
+running install_data
+creating /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/ament_index
+creating /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/ament_index/resource_index
+creating /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/ament_index/resource_index/packages
+copying resource/mia_robotics -> /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/ament_index/resource_index/packages
+copying package.xml -> /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/mia_robotics
+running install_egg_info
+Copying build/mia_robotics/mia_robotics.egg-info to /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics-0.0.0-py3.12.egg-info
+running install_scripts
+Installing auto script to /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/mia_robotics
+Installing camera script to /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/mia_robotics
+Installing pilot script to /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/mia_robotics
+writing list of installed files to '/home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/install.log'

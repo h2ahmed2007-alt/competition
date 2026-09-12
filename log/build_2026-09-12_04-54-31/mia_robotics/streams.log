@@ -1,0 +1,35 @@
+[2.061s] Invoking command in '/home/vboxuser/Desktop/contest repo/competition': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/mia_robotics build --build-base /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build install --record /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/install.log --install-scripts $base/lib/mia_robotics --single-version-externally-managed install_data
+[2.831s] running egg_info
+[2.890s] writing build/mia_robotics/mia_robotics.egg-info/PKG-INFO
+[2.891s] writing dependency_links to build/mia_robotics/mia_robotics.egg-info/dependency_links.txt
+[2.891s] writing entry points to build/mia_robotics/mia_robotics.egg-info/entry_points.txt
+[2.892s] writing requirements to build/mia_robotics/mia_robotics.egg-info/requires.txt
+[2.893s] writing top-level names to build/mia_robotics/mia_robotics.egg-info/top_level.txt
+[3.021s] reading manifest file 'build/mia_robotics/mia_robotics.egg-info/SOURCES.txt'
+[3.025s] writing manifest file 'build/mia_robotics/mia_robotics.egg-info/SOURCES.txt'
+[3.025s] running build
+[3.025s] running build_py
+[3.027s] copying mia_robotics/camera.py -> /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+[3.027s] copying mia_robotics/contest_pilot.py -> /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+[3.027s] copying mia_robotics/yolo_reading.py -> /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+[3.027s] copying mia_robotics/main.py -> /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+[3.028s] copying mia_robotics/auto_navg.py -> /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+[3.028s] copying mia_robotics/__init__.py -> /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+[3.029s] copying mia_robotics/best.pt -> /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics
+[3.035s] running install
+[3.052s] running install_lib
+[3.114s] copying /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics/yolo_reading.py -> /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics
+[3.114s] copying /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build/lib/mia_robotics/best.pt -> /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics
+[3.121s] byte-compiling /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics/yolo_reading.py to yolo_reading.cpython-312.pyc
+[3.123s] running install_data
+[3.123s] copying resource/mia_robotics -> /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/ament_index/resource_index/packages
+[3.123s] copying package.xml -> /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/mia_robotics
+[3.124s] running install_egg_info
+[3.184s] removing '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics-0.0.0-py3.12.egg-info' (and everything under it)
+[3.184s] Copying build/mia_robotics/mia_robotics.egg-info to /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages/mia_robotics-0.0.0-py3.12.egg-info
+[3.186s] running install_scripts
+[3.513s] Installing auto script to /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/mia_robotics
+[3.513s] Installing camera script to /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/mia_robotics
+[3.514s] Installing pilot script to /home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/mia_robotics
+[3.514s] writing list of installed files to '/home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/install.log'
+[3.567s] Invoked command in '/home/vboxuser/Desktop/contest repo/competition' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/mia_robotics build --build-base /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build install --record /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/install.log --install-scripts $base/lib/mia_robotics --single-version-externally-managed install_data

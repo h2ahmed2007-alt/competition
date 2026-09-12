@@ -1,0 +1,94 @@
+[0.354s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.354s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=3, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x77c8bbe953a0>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x77c8bbe94fe0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x77c8bbe94fe0>>, mixin_verb=('build',))
+[0.479s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.479s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.479s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.479s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.480s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.482s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.482s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/vboxuser/Desktop/contest repo/competition'
+[0.482s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.482s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.482s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.483s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.483s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.483s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.483s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.483s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.483s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.570s] DEBUG:colcon.colcon_core.package_identification:Package '.' with type 'ros.ament_python' and name 'mia_robotics'
+[0.570s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.570s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.570s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.570s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.570s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.616s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.616s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.623s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 4 installed packages in /home/vboxuser/compdrivers_ws/install
+[0.624s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 3 installed packages in /home/vboxuser/microros_ws/install
+[0.625s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 1 installed packages in /home/vboxuser/training_ws/install
+[0.625s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 1 installed packages in /home/vboxuser/ros2_ws/install
+[0.629s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 347 installed packages in /opt/ros/jazzy
+[0.634s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.848s] Level 5:colcon.colcon_core.verb:set package 'mia_robotics' build argument 'cmake_args' from command line to 'None'
+[0.848s] Level 5:colcon.colcon_core.verb:set package 'mia_robotics' build argument 'cmake_target' from command line to 'None'
+[0.848s] Level 5:colcon.colcon_core.verb:set package 'mia_robotics' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.848s] Level 5:colcon.colcon_core.verb:set package 'mia_robotics' build argument 'cmake_clean_cache' from command line to 'False'
+[0.848s] Level 5:colcon.colcon_core.verb:set package 'mia_robotics' build argument 'cmake_clean_first' from command line to 'False'
+[0.848s] Level 5:colcon.colcon_core.verb:set package 'mia_robotics' build argument 'cmake_force_configure' from command line to 'False'
+[0.848s] Level 5:colcon.colcon_core.verb:set package 'mia_robotics' build argument 'ament_cmake_args' from command line to 'None'
+[0.849s] Level 5:colcon.colcon_core.verb:set package 'mia_robotics' build argument 'catkin_cmake_args' from command line to 'None'
+[0.849s] Level 5:colcon.colcon_core.verb:set package 'mia_robotics' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.849s] DEBUG:colcon.colcon_core.verb:Building package 'mia_robotics' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/vboxuser/Desktop/contest repo/competition/build/mia_robotics', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics', 'merge_install': False, 'path': '/home/vboxuser/Desktop/contest repo/competition', 'symlink_install': False, 'test_result_base': None}
+[0.849s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.850s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.851s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/vboxuser/Desktop/contest repo/competition' with build type 'ament_python'
+[0.851s] Level 1:colcon.colcon_core.shell:create_environment_hook('mia_robotics', 'ament_prefix_path')
+[0.858s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.858s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/mia_robotics/hook/ament_prefix_path.ps1'
+[0.860s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/mia_robotics/hook/ament_prefix_path.dsv'
+[0.861s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/mia_robotics/hook/ament_prefix_path.sh'
+[0.863s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.863s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.472s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/vboxuser/Desktop/contest repo/competition'
+[1.473s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.473s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[3.128s] DEBUG:colcon.colcon_core.task.python.build:Available setuptools commands: clean, install_headers, setopt, saveopts, editable_wheel, sdist, bdist_egg, build_clib, check, bdist, build_py, update_catalog, build, develop, install_scripts, install, compile_catalog, install_egg_info, build_scripts, alias, build_ext, rotate, bdist_dumb, bdist_rpm, symlink_data, dist_info, install_data, bdist_wheel, easy_install, init_catalog, install_lib, extract_messages, egg_info
+[3.132s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/vboxuser/Desktop/contest repo/competition': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/mia_robotics build --build-base /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build install --record /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/install.log --install-scripts $base/lib/mia_robotics --single-version-externally-managed install_data
+[4.680s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/vboxuser/Desktop/contest repo/competition' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/mia_robotics build --build-base /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/build install --record /home/vboxuser/Desktop/contest repo/competition/build/mia_robotics/install.log --install-scripts $base/lib/mia_robotics --single-version-externally-managed install_data
+[4.704s] Level 1:colcon.colcon_core.environment:checking '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics' for CMake module files
+[4.706s] Level 1:colcon.colcon_core.environment:checking '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics' for CMake config files
+[4.709s] Level 1:colcon.colcon_core.environment:checking '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib'
+[4.709s] Level 1:colcon.colcon_core.environment:checking '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/bin'
+[4.709s] Level 1:colcon.colcon_core.environment:checking '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/pkgconfig/mia_robotics.pc'
+[4.710s] Level 1:colcon.colcon_core.environment:checking '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/lib/python3.12/site-packages'
+[4.711s] Level 1:colcon.colcon_core.shell:create_environment_hook('mia_robotics', 'pythonpath')
+[4.711s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/mia_robotics/hook/pythonpath.ps1'
+[4.713s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/mia_robotics/hook/pythonpath.dsv'
+[4.715s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/mia_robotics/hook/pythonpath.sh'
+[4.717s] Level 1:colcon.colcon_core.environment:checking '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/bin'
+[4.718s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(mia_robotics)
+[4.718s] INFO:colcon.colcon_core.shell:Creating package script '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/mia_robotics/package.ps1'
+[4.721s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/mia_robotics/package.dsv'
+[4.723s] INFO:colcon.colcon_core.shell:Creating package script '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/mia_robotics/package.sh'
+[4.725s] INFO:colcon.colcon_core.shell:Creating package script '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/mia_robotics/package.bash'
+[4.726s] INFO:colcon.colcon_core.shell:Creating package script '/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/mia_robotics/package.zsh'
+[4.728s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/vboxuser/Desktop/contest repo/competition/install/mia_robotics/share/colcon-core/packages/mia_robotics)
+[4.728s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[4.729s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[4.729s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[4.729s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[4.746s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[4.747s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[4.747s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[4.783s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[4.784s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/vboxuser/Desktop/contest repo/competition/install/local_setup.ps1'
+[4.787s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/vboxuser/Desktop/contest repo/competition/install/_local_setup_util_ps1.py'
+[4.790s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/vboxuser/Desktop/contest repo/competition/install/setup.ps1'
+[4.794s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/vboxuser/Desktop/contest repo/competition/install/local_setup.sh'
+[4.795s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/vboxuser/Desktop/contest repo/competition/install/_local_setup_util_sh.py'
+[4.797s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/vboxuser/Desktop/contest repo/competition/install/setup.sh'
+[4.800s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/vboxuser/Desktop/contest repo/competition/install/local_setup.bash'
+[4.801s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/vboxuser/Desktop/contest repo/competition/install/setup.bash'
+[4.805s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/vboxuser/Desktop/contest repo/competition/install/local_setup.zsh'
+[4.807s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/vboxuser/Desktop/contest repo/competition/install/setup.zsh'
