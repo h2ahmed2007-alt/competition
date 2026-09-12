@@ -1,7 +1,7 @@
 import rclpy
 import cv2
-from camera import Camera
-from yolo_reading import get_detection
+from .camera import Camera
+from .yolo_reading import get_detection
 
 def main():
     rclpy.init()
@@ -12,7 +12,7 @@ def main():
 
         rclpy.spin_once(camera, timeout_sec=0.01)
         if camera.frame is not None:
-           annotated_frame = get_detection(camera.frame)
+           annotated_frame = get_detection(camera.frame, camera)
            cv2.imshow('YOLO Detection', annotated_frame)
 
 
