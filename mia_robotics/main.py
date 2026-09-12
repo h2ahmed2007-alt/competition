@@ -15,8 +15,9 @@ def main():
            annotated_frame = get_detection(camera.frame)
            cv2.imshow('YOLO Detection', annotated_frame)
 
-        if cv2.waitKey(1) == 27:
-            break
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+           break
 
     camera.destroy_node()
     rclpy.shutdown()
