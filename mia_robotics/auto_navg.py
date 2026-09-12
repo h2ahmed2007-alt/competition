@@ -177,7 +177,7 @@ class AutoReturnWithTimeoutTriggerNavigator(Node):
         
         
         if self.filtered_distance<=self.STOP_DISTANCE:
-            
+            self.get_logger().info("obstacle")
             
             
             if self.state=="TRACK_HOLONOMIC":
@@ -190,13 +190,8 @@ class AutoReturnWithTimeoutTriggerNavigator(Node):
             
             self.cmd_pub.publish(Twist())   
 
-        # Watchdog Safety Check
-        if self.state in ["SEARCH_STRAFE", "TRACK_HOLONOMIC"]:
-            if ((now - self.last_ultra_time).nanoseconds / 1e9 > self.STALE_THRESHOLD_SEC or
-                (now - self.last_vision_time).nanoseconds / 1e9 > self.STALE_THRESHOLD_SEC):
-                self.get_logger().warn("DATA STALE! Emergency Stop engaged.", throttle_duration_sec=2.0)
-                self.cmd_pub.publish(Twist())
-                return
+       
+        
 
         # STATE 1: SEARCHING
         if self.state == "SEARCH_STRAFE":
