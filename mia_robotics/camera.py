@@ -1,7 +1,7 @@
 import rclpy
 import cv2
 from rclpy.node import Node
-from std_msgs.msg import String
+from std_msgs.msg import String, Float32
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 
@@ -12,6 +12,7 @@ class Camera(Node):
         self.frame = None
 
         self.target_pub = self.create_publisher(String, '/target_type', 10)
+        self.target_x_error = self.create_publisher(Float32, '/target_x_error', 10)
 
         self.camera_sub = self.create_subscription(
             Image,
