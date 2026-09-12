@@ -1,4 +1,0 @@
-[console_scripts]
-auto = mia_robotics.auto_navg:main
-camera = mia_robotics.main:main
-pilot = mia_robotics.contest_pilot:main
