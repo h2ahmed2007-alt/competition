@@ -31,7 +31,7 @@ class AutoReturnWithTimeoutTriggerNavigator(Node):
         # --- 2. Publishers & Subscribers ---
         self.cmd_pub = self.create_publisher(Twist, '/cmd_vel', 10)
         
-        self.create_subscription(int32, '/ultrasonic_distance', self.ultrasonic_cb, 10)
+        self.create_subscription(Int32, '/ultrasonic_distance', self.ultrasonic_cb, 10)
         self.create_subscription(Float32, '/target_x_error', self.vision_error_cb, 10)
         self.create_subscription(String, '/target_type', self.target_type_cb, 10)
         self.create_subscription(Odometry, '/odom', self.odom_cb, 10)
